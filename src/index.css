@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "DM Serif Display", "Playfair Display", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --color-brand-purple: #b19ec8;
+  --color-brand-light-purple: #c3b3d7;
+  --color-brand-dark-purple: #7c6696;
+  --color-brand-yellow: #fff48f;
+  --color-brand-soft-yellow: #fef08a;
+  --color-brand-accent-yellow: #fff799;
+}
+
+.font-brand-title {
+  font-family: 'DM Serif Display', Georgia, serif;
+}
+
+.logo-font {
+  font-family: 'DM Serif Display', Georgia, serif;
+  letter-spacing: -0.04em;
+}
+
+.hero-wave-left {
+  position: absolute;
+  bottom: -1px;
+  left: -20px;
+  width: 280px;
+  height: 180px;
+  background: #fef08a;
+  border-radius: 60% 80% 0 0;
+  transform: rotate(-10deg);
+  z-index: 10;
+  opacity: 0.95;
+  pointer-events: none;
+}
+
+.hero-wave-right {
+  position: absolute;
+  bottom: -1px;
+  right: -30px;
+  width: 320px;
+  height: 160px;
+  background: #fef08a;
+  border-radius: 80% 50% 0 0;
+  transform: rotate(8deg);
+  z-index: 10;
+  opacity: 0.95;
+  pointer-events: none;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f8f6fb;
+}
+::-webkit-scrollbar-thumb {
+  background: #c3b3d7;
+  border-radius: 9999px;
+}

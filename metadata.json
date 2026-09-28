@@ -1,0 +1,6 @@
+{
+  "name": "bræk. Açai & Coffee",
+  "description": "Escape the chaos, embrace the braek. Wholesome açai bowls, artisan coffee, campus events, and corporate catering at Li Ka Shing Library, Singapore.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
