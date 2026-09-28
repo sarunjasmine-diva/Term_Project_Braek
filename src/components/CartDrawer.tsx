@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Trash2, Plus, Minus, ShoppingBag, Sparkles, Check, Clock, MapPin } from 'lucide-react';
 import { CartItem } from '../types';
 
@@ -9,6 +9,8 @@ interface CartDrawerProps {
   onUpdateQuantity: (id: string, delta: number) => void;
   onRemoveItem: (id: string) => void;
   onClearCart: () => void;
+  onOrderSuccess?: (items: CartItem[], total: number) => void;
+  initialDiscountCode?: string | null;
 }
 
 export const CartDrawer: React.FC<CartDrawerProps> = ({
@@ -18,6 +20,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   onUpdateQuantity,
   onRemoveItem,
   onClearCart,
+  onOrderSuccess,
+  initialDiscountCode,
 }) => {
   const [promoCode, setPromoCode] = useState('');
   const [appliedDiscount, setAppliedDiscount] = useState<number>(0);
@@ -26,6 +30,21 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [orderComplete, setOrderComplete] = useState(false);
   const [orderId, setOrderId] = useState('');
+
+  // Automatically apply promo if passed from Member area
+  useEffect(() => {
+    if (initialDiscountCode) {
+      setPromoCode(initialDiscountCode);
+      const code = initialDiscountCode.trim().toUpperCase();
+      if (code === 'SMU10' || code === 'BRAEK' || code === 'STUDENT') {
+        setAppliedDiscount(0.1);
+        setPromoError('');
+      } else if (code === 'BRAEK3OFF') {
+        setAppliedDiscount(0.2); // ~approx
+        setPromoError('');
+      }
+    }
+  }, [initialDiscountCode]);
 
   if (!isOpen) return null;
 
@@ -38,6 +57,12 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     if (code === 'SMU10' || code === 'BRAEK' || code === 'STUDENT') {
       setAppliedDiscount(0.1); // 10% off
       setPromoError('');
+    } else if (code === 'BRAEK3OFF') {
+      setAppliedDiscount(0.2); // ~S$3 off
+      setPromoError('');
+    } else if (code === 'FREECOFFEE' || code === 'FREESUPER') {
+      setAppliedDiscount(0.25);
+      setPromoError('');
     } else {
       setPromoError('Invalid promo code. Try "SMU10" for 10% off!');
     }
@@ -47,8 +72,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     setIsCheckingOut(true);
     setTimeout(() => {
       setIsCheckingOut(false);
-      setOrderId(`BK-${Math.floor(1000 + Math.random() * 9000)}`);
+      const newId = `BK-${Math.floor(1000 + Math.random() * 9000)}`;
+      setOrderId(newId);
       setOrderComplete(true);
+
+      if (onOrderSuccess) {
+        onOrderSuccess(items, total);
+      }
     }, 1000);
   };
 
@@ -91,7 +121,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 Order Received!
               </h3>
               <p className="text-xs text-gray-500 mb-6">
-                Your bowl is being handcrafted with love.
+                Your bowl is being handcrafted with love. Wellness points &amp; bowl count have been added to your member account!
               </p>
 
               <div className="bg-[#b19ec8]/15 border border-purple-200/80 rounded-2xl p-5 w-full text-left space-y-3 mb-6">
@@ -115,7 +145,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 onClick={handleResetOrder}
                 className="w-full py-3 rounded-full bg-[#fef08a] hover:bg-[#fae45b] text-gray-900 font-bold text-xs uppercase tracking-wider transition-all shadow-xs cursor-pointer"
               >
-                Back to Cafe
+                Done
               </button>
             </div>
           ) : items.length === 0 ? (
@@ -123,7 +153,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               <ShoppingBag className="w-12 h-12 stroke-1 text-gray-300 mb-3" />
               <p className="text-sm font-medium text-gray-600">Your bag is empty</p>
               <p className="text-xs text-gray-400 mt-1 max-w-xs">
-                Explore our wholesome menu to add fresh açai bowls, smoothies, and artisan coffee!
+                Explore our wholesome menu to compose fresh açai bowls, smoothies, and artisan coffee!
               </p>
             </div>
           ) : (
@@ -210,7 +240,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </div>
                 {appliedDiscount > 0 && (
                   <p className="text-emerald-700 font-medium text-[11px] mt-1.5 flex items-center">
-                    <Sparkles className="w-3 h-3 mr-1" /> 10% SMU Student discount applied!
+                    <Sparkles className="w-3 h-3 mr-1" /> Discount voucher applied!
                   </p>
                 )}
                 {promoError && (
@@ -230,7 +260,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </div>
                 {appliedDiscount > 0 && (
                   <div className="flex justify-between text-emerald-700 font-medium">
-                    <span>Discount (10%)</span>
+                    <span>Discount</span>
                     <span>-S${discountAmount.toFixed(2)}</span>
                   </div>
                 )}

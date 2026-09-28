@@ -53,3 +53,51 @@ export interface CorporateQuote {
   addCoffee: boolean;
   notes: string;
 }
+
+export interface CustomerProfile {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  memberSince: string;
+  tier: 'Lilac Seedling' | 'Açai Enthusiast' | 'Braek Connoisseur' | 'VIP Master Braeker';
+  points: number;
+  bowlsPurchased: number;
+  memberQrCode: string;
+}
+
+export interface CustomerOrder {
+  id: string;
+  date: string;
+  items: {
+    name: string;
+    quantity: number;
+    price: number;
+    details?: string;
+  }[];
+  total: number;
+  pointsEarned: number;
+  bowlsCount: number;
+  status: 'Completed' | 'Ready for Pickup' | 'Preparing';
+}
+
+export interface CustomerDiscount {
+  id: string;
+  title: string;
+  code: string;
+  description: string;
+  discountType: 'percentage' | 'fixed' | 'free_item';
+  value: number; // e.g., 0.1 for 10% or 3.00 for $3
+  expiry: string;
+  status: 'active' | 'used' | 'locked';
+  requiredPoints?: number;
+}
+
+export interface RewardStage {
+  stage: number;
+  bowlsRequired: number;
+  title: string;
+  rewardDescription: string;
+  status: 'achieved' | 'current' | 'locked';
+  perkBadge: string;
+}
