@@ -16,6 +16,7 @@ import { CustomBowlModal } from './components/CustomBowlModal';
 import { ContactModal } from './components/ContactModal';
 import { MissionModal } from './components/MissionModal';
 import { CartDrawer } from './components/CartDrawer';
+import { ProfNoteBox } from './components/ProfNoteBox';
 import { EVENTS_DATA } from './data/menuData';
 import {
   INITIAL_CUSTOMER,
@@ -236,7 +237,10 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-gray-800 font-sans selection:bg-yellow-200">
+    <div className="min-h-screen flex flex-col bg-white text-gray-800 font-sans selection:bg-yellow-200 relative">
+      {/* Ideation Note in Upper Right Corner for Prof. Roh */}
+      <ProfNoteBox />
+
       {/* Sticky Header with Navigation & Branding */}
       <Header
         currentTab={currentTab}
